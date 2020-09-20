@@ -112,24 +112,13 @@ CREATE TABLE `messages` (
   CONSTRAINT `FK_target_id` FOREIGN KEY (`target_id`) REFERENCES `users` (`id`) ON UPDATE CASCADE
 );
 
-DROP TABLE IF EXISTS `subscribers`;
-CREATE TABLE `subscribers` (
-  `target_user_id` BIGINT UNSIGNED NOT NULL,
-  `follower_id` BIGINT UNSIGNED NOT NULL,
-  PRIMARY KEY (`target_user_id`),
-  
+DROP TABLE IF EXISTS `subscribers_and_subscriptions`;
+CREATE TABLE `subscribers_and_subscriptions` (
+  `user_id` bigint unsigned NOT NULL,
+  `follower_id` bigint unsigned NOT NULL,
+  PRIMARY KEY (`user_id`,`follower_id`),
+  UNIQUE KEY `UNIQUE` (`user_id`,`follower_id`),
   KEY `FK_follower_id` (`follower_id`),
   CONSTRAINT `FK_follower_id` FOREIGN KEY (`follower_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `FK_target_user_id` FOREIGN KEY (`target_user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-);
-
-DROP TABLE IF EXISTS `subscriptions`;
-CREATE TABLE `subscriptions` (
-  `follower_id` BIGINT UNSIGNED NOT NULL,
-  `follower_target_id` BIGINT UNSIGNED NOT NULL,
-  PRIMARY KEY (`follower_id`),
-  
-  KEY `FK_follower_target_id` (`follower_target_id`),
-  CONSTRAINT `FK_follower` FOREIGN KEY (`follower_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `FK_follower_target_id` FOREIGN KEY (`follower_target_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `FK_target_user_id` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 );
